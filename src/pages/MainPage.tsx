@@ -6,7 +6,7 @@ import { Box, Typography, Button, TextField, Dialog, DialogActions, DialogConten
 const MainPage = () => {
   const navigate = useNavigate();
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [password, setPassword] = useState('');
+  const [Password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleLogout = async () => {
@@ -27,7 +27,7 @@ const MainPage = () => {
         return;
       }
       await axiosInstance.delete('http://localhost:5005/api/Auth/deleteAccount', {
-        data: { AccessToken, password }
+        data: { AccessToken, Password }
       });
       localStorage.removeItem('AccessToken');
       navigate('/register');
@@ -84,10 +84,10 @@ const MainPage = () => {
             Для удаления аккаунта введите ваш пароль.
           </Typography>
           <TextField
-            type="password"
+            type="Password"
             label="Пароль"
             fullWidth
-            value={password}
+            value={Password}
             onChange={(e) => setPassword(e.target.value)}
             error={!!error}
             helperText={error}
