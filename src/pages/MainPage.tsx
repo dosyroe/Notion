@@ -12,7 +12,7 @@ const MainPage = () => {
   const handleLogout = async () => {
     try {
       await axiosInstance.delete('http://localhost:5005/api/Auth/logout');
-      localStorage.removeItem('accessToken');
+      localStorage.removeItem('AccessToken');
       navigate('/login');
     } catch (err) {
       console.error('Ошибка при выходе:', err);
@@ -21,15 +21,15 @@ const MainPage = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) {
+      const AccessToken = localStorage.getItem('AccessToken');
+      if (!AccessToken) {
         setError('AccessToken отсутствует');
         return;
       }
       await axiosInstance.delete('http://localhost:5005/api/Auth/deleteAccount', {
-        data: { accessToken, password }
+        data: { AccessToken, password }
       });
-      localStorage.removeItem('accessToken');
+      localStorage.removeItem('AccessToken');
       navigate('/register');
     } catch (err) {
       setError('Ошибка при удалении аккаунта. Проверьте пароль.');
