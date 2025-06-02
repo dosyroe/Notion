@@ -19,8 +19,11 @@ axiosInstance.interceptors.response.use(
       try {
         const refreshResponse = await axios.put(
           'http://localhost:5005/api/auth/refresh',
-          { AccessToken: AccessToken },
-          { withCredentials: true }
+          null, // Тело запроса пустое
+          {
+            params: { AccessToken }, // AccessToken передаётся в параметрах
+            withCredentials: true,
+          }
         );
         if (refreshResponse.data?.AccessToken) {
           localStorage.setItem('AccessToken', refreshResponse.data.AccessToken);
