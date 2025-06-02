@@ -47,7 +47,7 @@ const RegisterPage = () => {
     }
     try {
       const response = await axiosInstance.post('http://localhost:5005/api/Auth/register', { name, email, password, role:"РУСЛАН ЕБЛАН" });
-      if (response.data?.AccessToken) {
+      if (response.data?.accessToken) {
         localStorage.setItem('accessToken', response.data.AccessToken);
         navigate('/main'); // Переход на MainPage
       }

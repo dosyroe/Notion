@@ -43,8 +43,8 @@ const LoginPage = () => {
     }
     try {
       const response = await axiosInstance.post('http://localhost:5005/api/Auth/login', { email, password });
-      if (response.data?.AccessToken) {
-        localStorage.setItem('AccessToken', response.data.AccessToken);
+      if (response.data?.accessToken) {
+        localStorage.setItem('accessToken', response.data.AccessToken);
         navigate('/main'); // Переход на MainPage
       }
     } catch (err: unknown) {
