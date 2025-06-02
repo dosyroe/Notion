@@ -1,7 +1,42 @@
-import { Link } from 'react-router-dom';
-import { Box, Typography, Button, Paper } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import axiosInstance from '../api/axiosInstance';
+import { Box, Typography, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 const MainPage = () => {
+  const navigate = useNavigate();
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.delete('/api/Auth/logout');
+      localStorage.removeItem('accessToken');
+      navigate('/login');
+    } catch (err) {
+      console.error('Ошибка при выходе:', err);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        setError('AccessToken отсутствует');
+        return;
+      }
+      await axiosInstance.delete('/api/Auth/deleteAccount', {
+        data: { accessToken, password }
+      });
+      localStorage.removeItem('accessToken');
+      navigate('/register');
+    } catch (err) {
+      setError('Ошибка при удалении аккаунта. Проверьте пароль.');
+      console.error('Ошибка при удалении аккаунта:', err);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -10,55 +45,67 @@ const MainPage = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        flexDirection: 'column',
+        gap: 2,
       }}
     >
-      <Paper
-        elevation={6}
+      <Typography variant="h4" fontWeight={700} color="var(--primary-text, #fff)">
+        Добро пожаловать в MainPage!
+      </Typography>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleLogout}
         sx={{
-          p: 5,
-          borderRadius: 4,
-          bgcolor: 'var(--panel-color, #27292B)',
-          color: 'var(--primary-text, #fff)',
-          minWidth: 340,
-          maxWidth: 400,
-          textAlign: 'center',
+          bgcolor: 'var(--btn-color, #725EFE)',
+          '&:hover': { bgcolor: '#5a48d6' },
         }}
       >
-        <Typography variant="h4" fontWeight={700} mb={2}>
-          Добро пожаловать в Notion-клон!
-        </Typography>
-        <Typography variant="body1" mb={4}>
-          Для продолжения войдите в аккаунт или зарегистрируйтесь.
-        </Typography>
-        <Box display="flex" gap={2} justifyContent="center">
+        Выйти
+      </Button>
+      <Button
+        variant="outlined"
+        color="error"
+        onClick={() => setDeleteDialogOpen(true)}
+        sx={{
+          borderColor: 'var(--btn-color, #725EFE)',
+          color: 'var(--btn-color, #725EFE)',
+          '&:hover': { borderColor: '#5a48d6', color: '#5a48d6' },
+        }}
+      >
+        Удалить аккаунт
+      </Button>
+
+      {/* Диалоговое окно для подтверждения удаления аккаунта */}
+      <Dialog open={isDeleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+        <DialogTitle>Удаление аккаунта</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1" mb={2}>
+            Для удаления аккаунта введите ваш пароль.
+          </Typography>
+          <TextField
+            type="password"
+            label="Пароль"
+            fullWidth
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            error={!!error}
+            helperText={error}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)} color="primary">
+            Отмена
+          </Button>
           <Button
-            component={Link}
-            to="/login"
+            onClick={handleDeleteAccount}
+            color="error"
             variant="contained"
-            sx={{
-              bgcolor: 'var(--btn-color, #725EFE)',
-              color: '#fff',
-              fontWeight: 600,
-              '&:hover': { bgcolor: '#5a48d6' },
-            }}
           >
-            Войти
+            Удалить
           </Button>
-          <Button
-            component={Link}
-            to="/register"
-            variant="outlined"
-            sx={{
-              borderColor: 'var(--btn-color, #725EFE)',
-              color: 'var(--btn-color, #725EFE)',
-              fontWeight: 600,
-              '&:hover': { borderColor: '#5a48d6', color: '#5a48d6' },
-            }}
-          >
-            Регистрация
-          </Button>
-        </Box>
-      </Paper>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
