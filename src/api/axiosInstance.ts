@@ -15,11 +15,11 @@ axiosInstance.interceptors.response.use(
       !originalRequest.url.includes('/api/auth/refresh')
     ) {
       originalRequest._retry = true;
-      const accessToken = localStorage.getItem('AccessToken');
+      const AccessToken = localStorage.getItem('AccessToken');
       try {
         const refreshResponse = await axios.put(
           'http://localhost:5005/api/auth/refresh',
-          { accessToken: accessToken },
+          { AccessToken: AccessToken },
           { withCredentials: true }
         );
         if (refreshResponse.data?.AccessToken) {

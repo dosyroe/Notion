@@ -6,9 +6,9 @@ import axiosInstance from '../api/axiosInstance';
 import ErrorBanner from './ErrorBanner';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [Email, setEmail] = useState('');
+  const [Password, setPassword] = useState('');
+  const [errors, setErrors] = useState<{ Email?: string; Password?: string }>({});
   const [banner, setBanner] = useState<string[]>([]);
   const navigate = useNavigate();
 
@@ -21,18 +21,18 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newErrors: { email?: string; password?: string } = {};
-    if (!email.trim()) {
-      newErrors.email = 'Поле email не заполнено';
+    const newErrors: { Email?: string; Password?: string } = {};
+    if (!Email.trim()) {
+      newErrors.Email = 'Поле Email не заполнено';
     }
-    // Простая email-проверка
-    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-      newErrors.email = 'Некорректный email';
+    // Простая Email-проверка
+    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(Email)) {
+      newErrors.Email = 'Некорректный Email';
     }
-    if (!password) {
-      newErrors.password = 'Поле пароль не заполнено';
-    } else if (password.length < 8) {
-      newErrors.password = 'В пароле должно быть минимум 8 символов';
+    if (!Password) {
+      newErrors.Password = 'Поле пароль не заполнено';
+    } else if (Password.length < 8) {
+      newErrors.Password = 'В пароле должно быть минимум 8 символов';
     }
     setErrors(newErrors);
     // Собираем все ошибки в массив для баннера
@@ -42,9 +42,9 @@ const LoginPage = () => {
       return;
     }
     try {
-      const response = await axiosInstance.post('http://localhost:5005/api/Auth/login', { email, password });
-      if (response.data?.accessToken) {
-        localStorage.setItem('accessToken', response.data.accessToken);
+      const response = await axiosInstance.post('http://localhost:5005/api/Auth/login', { Email, Password });
+      if (response.data?.AccessToken) {
+        localStorage.setItem('AccessToken', response.data.AccessToken);
         navigate('/main'); // Переход на MainPage
       }
     } catch (err: unknown) {
@@ -58,7 +58,7 @@ const LoginPage = () => {
         message = err.message;
       }
       setBanner([message]);
-      setErrors({ ...newErrors, email: message });
+      setErrors({ ...newErrors, Email: message });
     }
   };
 
@@ -69,7 +69,7 @@ const LoginPage = () => {
       <div className={styles['main-block']}>
         <div className={styles['text']}>
           <p className={styles['welcome']}>Welcome</p>
-          <p className={styles['enter']}>Enter your email and password to access your account.</p>
+          <p className={styles['enter']}>Enter your Email and Password to access your account.</p>
         </div>
         <form onSubmit={handleSubmit} className={styles['inputs']} noValidate>
           <div className={styles['input']}>
@@ -77,22 +77,22 @@ const LoginPage = () => {
             <input
               type="text"
               placeholder="Email"
-              value={email}
+              value={Email}
               onChange={e => setEmail(e.target.value)}
               required
-              className={errors.email ? styles['input-error'] : ''}
+              className={errors.Email ? styles['input-error'] : ''}
             />
           </div>
           <div className={styles['input']}>
             <p>Password</p>
             <input
-              type="password"
+              type="Password"
               placeholder="Password"
-              value={password}
+              value={Password}
               onChange={e => setPassword(e.target.value)}
               minLength={8}
               required
-              className={errors.password ? styles['input-error'] : ''}
+              className={errors.Password ? styles['input-error'] : ''}
             />
           </div>
           <div className={styles['remember-forgot']}>
