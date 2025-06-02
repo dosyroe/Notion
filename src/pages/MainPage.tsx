@@ -11,7 +11,7 @@ const MainPage = () => {
 
   const handleLogout = async () => {
     try {
-      await axiosInstance.delete('/api/Auth/logout');
+      await axiosInstance.delete('http://localhost:5005/api/Auth/logout');
       localStorage.removeItem('accessToken');
       navigate('/login');
     } catch (err) {
@@ -26,7 +26,7 @@ const MainPage = () => {
         setError('AccessToken отсутствует');
         return;
       }
-      await axiosInstance.delete('/api/Auth/deleteAccount', {
+      await axiosInstance.delete('http://localhost:5005/api/Auth/deleteAccount', {
         data: { accessToken, password }
       });
       localStorage.removeItem('accessToken');
