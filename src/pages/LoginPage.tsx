@@ -42,7 +42,7 @@ const LoginPage = () => {
       return;
     }
     try {
-      const response = await axiosInstance.post('/api/Auth/login', { email, password });
+      const response = await axiosInstance.post('http://localhost:5005/api/Auth/login', { email, password });
       if (response.data?.AccsesToken) {
         localStorage.setItem('AccessToken', response.data.AccessToken);
         navigate('/main'); // Переход на MainPage
