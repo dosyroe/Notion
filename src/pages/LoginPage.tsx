@@ -6,9 +6,9 @@ import axiosInstance from '../api/axiosInstance';
 import ErrorBanner from './ErrorBanner';
 
 const LoginPage = () => {
-  const [Email, setEmail] = useState('');
+  const [Login, setLogin] = useState('');
   const [Password, setPassword] = useState('');
-  const [errors, setErrors] = useState<{ Email?: string; Password?: string }>({});
+  const [errors, setErrors] = useState<{ Login?: string; Password?: string }>({});
   const [banner, setBanner] = useState<string[]>([]);
   const navigate = useNavigate();
 
@@ -21,13 +21,13 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newErrors: { Email?: string; Password?: string } = {};
-    if (!Email.trim()) {
-      newErrors.Email = 'Поле Email не заполнено';
+    const newErrors: { Login?: string; Password?: string } = {};
+    if (!Login.trim()) {
+      newErrors.Login = 'Поле Login не заполнено';
     }
-    // Простая Email-проверка
-    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(Email)) {
-      newErrors.Email = 'Некорректный Email';
+    // Простая Login-проверка
+    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(Login)) {
+      newErrors.Login = 'Некорректный Login';
     }
     if (!Password) {
       newErrors.Password = 'Поле пароль не заполнено';
@@ -42,7 +42,7 @@ const LoginPage = () => {
       return;
     }
     try {
-      const response = await axiosInstance.post('http://localhost:5005/api/Auth/login', { Email, Password });
+      const response = await axiosInstance.post('http://localhost:5005/api/Auth/login', { Login, Password });
       if (response.data?.AccessToken) {
         localStorage.setItem('AccessToken', response.data.AccessToken);
         navigate('/main'); // Переход на MainPage
@@ -58,7 +58,7 @@ const LoginPage = () => {
         message = err.message;
       }
       setBanner([message]);
-      setErrors({ ...newErrors, Email: message });
+      setErrors({ ...newErrors, Login: message });
     }
   };
 
@@ -69,18 +69,18 @@ const LoginPage = () => {
       <div className={styles['main-block']}>
         <div className={styles['text']}>
           <p className={styles['welcome']}>Welcome</p>
-          <p className={styles['enter']}>Enter your Email and Password to access your account.</p>
+          <p className={styles['enter']}>Enter your Login and Password to access your account.</p>
         </div>
         <form onSubmit={handleSubmit} className={styles['inputs']} noValidate>
           <div className={styles['input']}>
-            <p>Email</p>
+            <p>Login</p>
             <input
               type="text"
-              placeholder="Email"
-              value={Email}
-              onChange={e => setEmail(e.target.value)}
+              placeholder="Login"
+              value={Login}
+              onChange={e => setLogin(e.target.value)}
               required
-              className={errors.Email ? styles['input-error'] : ''}
+              className={errors.Login ? styles['input-error'] : ''}
             />
           </div>
           <div className={styles['input']}>
