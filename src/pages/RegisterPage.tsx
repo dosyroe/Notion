@@ -47,8 +47,8 @@ const RegisterPage = () => {
     }
     try {
       const response = await axiosInstance.post('http://localhost:5005/api/Auth/register', { Name, Login, Password });
-      if (response.data?.AccessToken) {
-        localStorage.setItem('AccessToken', response.data.AccessToken);
+      if (response.data?.Access) {
+        localStorage.setItem('Access', response.data.Access);
         navigate('/main');
       }
     } catch (err: unknown) {

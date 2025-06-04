@@ -15,23 +15,23 @@ axiosInstance.interceptors.response.use(
       !originalRequest.url.includes('/api/auth/refresh')
     ) {
       originalRequest._retry = true;
-      const AccessToken = localStorage.getItem('AccessToken');
+      const Access = localStorage.getItem('Access');
       try {
         const refreshResponse = await axios.put(
           'http://localhost:5005/api/auth/refresh',
           null, // Тело запроса пустое
           {
-            params: { AccessToken }, // AccessToken передаётся в параметрах
+            params: { Access }, // Access передаётся в параметрах
             withCredentials: true,
           }
         );
-        if (refreshResponse.data?.AccessToken) {
-          localStorage.setItem('AccessToken', refreshResponse.data.AccessToken);
-          originalRequest.headers['Authorization'] = `Bearer ${refreshResponse.data.AccessToken}`;
+        if (refreshResponse.data?.Access) {
+          localStorage.setItem('Access', refreshResponse.data.Access);
+          originalRequest.headers['Authorization'] = `Bearer ${refreshResponse.data.Access}`;
           return axiosInstance(originalRequest);
         }
       } catch (refreshError) {
-        localStorage.removeItem('AccessToken');
+        localStorage.removeItem('Access');
         window.location.href = '/login';
         return Promise.reject(refreshError);
       }
