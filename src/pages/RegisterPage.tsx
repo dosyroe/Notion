@@ -46,14 +46,13 @@ const RegisterPage = () => {
       return;
     }
     try {
-      const response = await axiosInstance.post('http://localhost:5005/api/Auth/register', { Name, Email, Password, role:"РУСЛАН ЕБЛАН" });
+      const response = await axiosInstance.post('http://localhost:5005/api/Auth/register', { Name, Email, Password });
       if (response.data?.AccessToken) {
         localStorage.setItem('AccessToken', response.data.AccessToken);
-        navigate('/main'); // Переход на MainPage
+        navigate('/main');
       }
     } catch (err: unknown) {
       let message = 'Ошибка регистрации';
-      // Define a type for Axios error
       interface AxiosError {
         isAxiosError?: boolean;
         response?: {
